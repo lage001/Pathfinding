@@ -34,9 +34,24 @@ public class PlayerC : MonoBehaviour
         map = MapManager.Instance.tilemaps["FloorMap"];
         
     }
-
+    private void Update()
+    {
+        switch (walkMode)
+        {
+            case WalkMode.AStar:
+                Astar();
+                break;
+            case WalkMode.NavMesh:
+                NavMesh();
+                break;
+            case WalkMode.Keyboard:
+                break;
+            default:
+                break;
+        }
+    }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         switch (walkMode)
         {
@@ -59,7 +74,7 @@ public class PlayerC : MonoBehaviour
         }
     }
 
-    private void MoveByNavMesh()
+    void NavMesh()
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
@@ -67,14 +82,16 @@ public class PlayerC : MonoBehaviour
             MoveActive = true;
             agent.SetTarget(targetPos);
         }
+    }
 
+    private void MoveByNavMesh()
+    {
         if (MoveActive)
         {
             Vector3 vPos = agent.transform.position;
             Vector3 newPos = new Vector3(vPos.x, vPos.y, 0);
             MoveToTarget(newPos);
         }
-            
     }
 
     public void SwitchWalkMode(WalkMode walkMode)
@@ -103,43 +120,44 @@ public class PlayerC : MonoBehaviour
         MoveToTarget(transform.position + new Vector3(Velocity.x, Velocity.y, 0));
         
     }
+    void Astar()
+    {
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        {
+            //get mouse position
+            targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int targetGridPos = map.WorldToCell(targetPos);
+            Vector2 finalTarget = new Vector2(targetGridPos.x, targetGridPos.y);
 
+
+            //nowPos = transform.position;
+            Vector3Int startGridPos = map.WorldToCell(transform.position);
+            Vector2 start = new Vector2(startGridPos.x, startGridPos.y);
+
+            pathList = AStar.AStarFindWay(start, finalTarget, MapManager.Instance.currentMap.CheckWalkable);
+            //pathList = AStar_1.AStarFindWay(start, finalTarget, MapManager.Instance.currentMap.CheckWalkable);
+
+            MoveActive = true;
+            i = 0;
+        }
+    }
     void MoveByAstar()
     {
-            if (Input.GetMouseButtonDown(0)&&!EventSystem.current.IsPointerOverGameObject())
+        if (MoveActive)
+        {
+            if (pathList != null && i < pathList.Count)
             {
-                //get mouse position
-                targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector3Int targetGridPos = map.WorldToCell(targetPos);
-                Vector2 finalTarget = new Vector2(targetGridPos.x, targetGridPos.y);
-
-
-                //nowPos = transform.position;
-                Vector3Int startGridPos = map.WorldToCell(transform.position);
-                Vector2 start = new Vector2(startGridPos.x, startGridPos.y);
-
-                pathList = AStar.AStarFindWay(start, finalTarget, MapManager.Instance.currentMap.CheckWalkable);
-                //pathList = AStar_1.AStarFindWay(start, finalTarget, MapManager.Instance.currentMap.CheckWalkable);
-
-                MoveActive = true;
-                i = 0;
-            }
-            if (MoveActive)
-            {
-                if (pathList != null && i < pathList.Count)
+                float distance = MoveToTarget(pathList[i] + new Vector2(0.5f, 0.5f));
+                if (distance < 0.1f)
                 {
-                    float distance = MoveToTarget(pathList[i] + new Vector2(0.5f, 0.5f));
-                    if (distance < 0.1f)
-                    {
-                        i++;
-                    }
-                }
-                else
-                {
-                    MoveActive = false;
+                    i++;
                 }
             }
-        
+            else
+            {
+                MoveActive = false;
+            }
+        }
     }
 
     float MoveToTarget(Vector3 target)
