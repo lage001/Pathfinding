@@ -76,7 +76,6 @@ public class PlaySys
     {
         float theta = GetAngle();
         playPanel.arrow.rotation *= Quaternion.Euler(0, 0, theta);
-        //Debug.Log((player.transform.position - new Vector3(map.target.pos.x, map.target.pos.y, 0) - new Vector3(0.5f, 0.5f, 0)).magnitude) ;
         if (AchieveTarget() && !IsOver)
         {
             GameOver();
@@ -85,10 +84,11 @@ public class PlaySys
     #region Update Angle of Arrow
     float GetAngle()
     {
-        //Get vector from player to target
+        // Get vector from player to target
         Vector3 direction = (map.target.pos + new Vector3(0.5f, 0.5f, 0) - player.transform.position).normalized;
 
         // Define new forward and new right
+        
         Vector3 forward = Rotate(playPanel.arrow.up);
         Vector3 right = Rotate(playPanel.arrow.right);
 
@@ -108,7 +108,6 @@ public class PlaySys
     #endregion
     public void OnFixedUpdate()
     {
-        
         cameraC.CameraFollow(player.transform);
         Vector3 screenPoint = mainCamera.WorldToScreenPoint(player.transform.position);
         mask.MaskFollow(screenPoint);
@@ -129,7 +128,6 @@ public class PlaySys
         {
             LookAround();
         }
-        
     }
     public void LookAround()
     {

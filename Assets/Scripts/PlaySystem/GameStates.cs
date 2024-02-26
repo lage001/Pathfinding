@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -9,25 +8,19 @@ public class Menu:IState
 {
     string name = "Menu";
     string panelName = UIConst.StartPanel;
-
     public void OnEnter()
     {
         UIManager.Instance.panelDict.Clear();
         GameManager.Instance.LoadSceneAsync(name,(obj)=> { UIManager.Instance.OpenPanel(panelName); });
     }
-
     public void OnExit()
     {
         UIManager.Instance.ClosePanel(UIConst.StartPanel);
     }
+    public void OnFixedUpdate() { }
 
-    public void OnFixedUpdate()
-    {
-    }
-
-    public void OnUpdate()
-    {
-    }
+    public void OnUpdate() { }
+    
 }
 public class PlayState : IState
 {
@@ -40,7 +33,6 @@ public class PlayState : IState
         UIManager.Instance.panelDict.Clear();
         isLoading = true;
         GameManager.Instance.LoadSceneAsync(name, InitScene);
-        
     }
     public void OnExit()
     {
@@ -68,34 +60,10 @@ public class PlayState : IState
         isLoading = false;
     }
 }
-public class GameOver : IState
-{
-
-    public void OnEnter()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnExit()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnFixedUpdate()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnUpdate()
-    {
-        throw new System.NotImplementedException();
-    }
-}
 public class CreateState : IState
 {
     string name = "Create";
     string panelName = UIConst.CreatePanel;
-    Dictionary<Vector3, GameObject> gridPlaneDic = new Dictionary<Vector3, GameObject>();
 
     public void OnEnter()
     {
@@ -110,27 +78,17 @@ public class CreateState : IState
         }
         GameManager.Instance.playerInput.CameraControl.Enable();
     }
-
     public void OnExit()
     {
         UIManager.Instance.ClosePanel(UIConst.CreatePanel);
         GameManager.Instance.playerInput.CameraControl.Disable();
     }
-
-    public void OnFixedUpdate()
-    {
-    }
-
-    public void OnUpdate()
-    {
-        
-    }
+    public void OnFixedUpdate() { }
+    public void OnUpdate() { }
     void InitScene(AsyncOperation obj)
     {
         UIManager.Instance.OpenPanel(panelName);
-        
     }
-   
 }
 public class TestState : IState
 {
@@ -174,7 +132,5 @@ public class TestState : IState
         cameraC.CameraFollow(player.transform);
     }
 
-    public void OnUpdate()
-    {
-    }
+    public void OnUpdate() { }
 }

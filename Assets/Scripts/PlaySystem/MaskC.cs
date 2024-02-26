@@ -9,7 +9,6 @@ public class MaskC : MonoBehaviour
     float timerF;
     int timerI;
     float realPixelSize;
-    // Update is called once per frame
     private void Start()
     {
         open = false;
@@ -33,7 +32,6 @@ public class MaskC : MonoBehaviour
             {
                 open = true;
             }
-
             if (open)
             {
                 Functions.SetMaskField(new Vector2(transform.position.x, transform.position.y) * realPixelSize, 3500f, 3500f, material);
@@ -43,8 +41,6 @@ public class MaskC : MonoBehaviour
                 Functions.SetMaskField(new Vector2(transform.position.x, transform.position.y) * realPixelSize, 3* realPixelSize, 3* realPixelSize, material);
             }
         }
-        //print(transform.position);
-
     }
     public void MaskFollow(Vector3 screenPos)
     {

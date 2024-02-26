@@ -23,12 +23,8 @@ public class CreatePanel : BasePanel
     Button hintBtn;
     Button homeBtn;
 
-
-    RectTransform initUIPos;
-    //public Image mask;
     Canvas canvas;
 
-    //public GameObject obj;
     public Material material;
     Transform mask;
     GameObject warnImagePrefab;
@@ -42,15 +38,12 @@ public class CreatePanel : BasePanel
     void InitUI()
     {
         canvas = GetComponentInParent<Canvas>();
-        
-        //initUIPos = transform.Find("Categories").GetComponent<RectTransform>();
 
         setStartBtn = transform.Find("UpRight/LoadAndSave/SetStartBtn").GetComponent<Button>();
         setTargetBtn = transform.Find("UpRight/LoadAndSave/SetTargetBtn").GetComponent<Button>();
         saveBtn = transform.Find("UpRight/LoadAndSave/SaveBtn").GetComponent<Button>();
         loadBtn = transform.Find("UpRight/LoadAndSave/LoadBtn").GetComponent<Button>();
         clearBtn = transform.Find("UpRight/LoadAndSave/ClearBtn").GetComponent<Button>();
-        //mask = transform.Find("Mask").GetComponent<Image>();
 
         pointBtn = transform.Find("MidLeft/SwitchBrushes/PointBtn").GetComponent<Button>();
         lineBtn = transform.Find("MidLeft/SwitchBrushes/LineBtn").GetComponent<Button>();
@@ -123,7 +116,6 @@ public class CreatePanel : BasePanel
         if(MapManager.Instance.currentMap.target.isSet && MapManager.Instance.currentMap.start.isSet)
         {  
             UIManager.Instance.OpenPanel(UIConst.SavePanel);
-            //MapManager.Instance.OnSave();
         }
         if (!MapManager.Instance.currentMap.target.isSet)
         {
@@ -186,8 +178,6 @@ public class CreatePanel : BasePanel
 
     public void BoxSelectUI(RectTransform UItoSelect)
     {
-        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
-
         Vector3[] coners = new Vector3[4];
         UItoSelect.GetWorldCorners(coners);
         Vector3 topLeft = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, coners[1]);
@@ -198,8 +188,12 @@ public class CreatePanel : BasePanel
         Functions.SetMaskField(screenPos, UItoSelect.rect.width * UItoSelect.localScale.x, UItoSelect.rect.height * UItoSelect.localScale.x, material);
     }
 
-    public void SetWarning(string content,int pos=-460)
+    public void SetWarning(string content,int pos=default)
     {
+        if (pos == default)
+            pos = -Screen.height / 2 + 80;
+        else
+            pos = -Screen.height / 2 + 540 + pos;
         GameObject obj = Instantiate(warnImagePrefab, transform);
         obj.GetComponent<RectTransform>().localPosition = Vector3.up * pos;
         TMPro.TextMeshProUGUI text = obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();

@@ -27,20 +27,16 @@ public class GameManager : SingletonBase<GameManager>
         base.Awake();
         DontDestroyOnLoad(gameObject);
 
-        fsm = new FSM();
         playerInput = new PlayerInput();
-        
+
+        fsm = new FSM();
         fsm.AddState(GameState.Menu, new Menu());
         fsm.AddState(GameState.Walk, new PlayState());
         fsm.AddState(GameState.Create, new CreateState());
         fsm.AddState(GameState.Test, new TestState());
-
         fsm.SwitchState(GameState.Menu);
-        print("我被调用了");
 
         InitPlayerData();
-
-
     }
     private void OnEnable()
     {
@@ -50,10 +46,6 @@ public class GameManager : SingletonBase<GameManager>
     {
         playerInput.Disable();
     }
-    public void LoadSceneAsync(string sceneName, Action<AsyncOperation> completed)
-    {
-        StartCoroutine(LoadScene(sceneName, completed));
-    }
     private void Update()
     {
         fsm.currentState.OnUpdate();
@@ -61,6 +53,10 @@ public class GameManager : SingletonBase<GameManager>
     private void FixedUpdate()
     {
         fsm.currentState.OnFixedUpdate();
+    }
+    public void LoadSceneAsync(string sceneName, Action<AsyncOperation> completed)
+    {
+        StartCoroutine(LoadScene(sceneName, completed));
     }
     IEnumerator LoadScene(string sceneName, Action<AsyncOperation> completed)
     {

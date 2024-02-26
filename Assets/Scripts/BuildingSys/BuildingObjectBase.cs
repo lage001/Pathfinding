@@ -16,7 +16,6 @@ public class BuildingObjectBase : ScriptableObject
     [SerializeField] Category category;
     [SerializeField] TileBase tileBase;
     public bool walkable;
-    //Tile image
     public TileBase TileBase
     {
         get
@@ -24,7 +23,6 @@ public class BuildingObjectBase : ScriptableObject
             return tileBase;
         }
     }
-    //The function of tile
     public Category Category
     {
         get

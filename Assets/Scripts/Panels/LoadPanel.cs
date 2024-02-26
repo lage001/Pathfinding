@@ -53,16 +53,12 @@ public class LoadPanel : BasePanel
     void Refresh()
     {
         Clear();
-        //string[] dirs = Directory.GetFileSystemEntries(path);
-
         int length = MapManager.Instance.mapNameList.Count;
-        //print(length);
         for (int i = 0; i < length; i++)
         {
             int mapIndex = i;
             Button btn = Instantiate(BtnPrefab, root, false).GetComponent<Button>();
             string name = MapManager.Instance.mapNameList[mapIndex];
-            
             btn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "¡¶"+ name + "¡·";
             btn.onClick.AddListener(() => 
             {
@@ -71,7 +67,6 @@ public class LoadPanel : BasePanel
             });
         }
     }
-
     void Clear()
     {
         Transform items = transform.Find("Image/Display/items");
@@ -83,9 +78,7 @@ public class LoadPanel : BasePanel
     void OnClickCancel()
     {
         UIManager.Instance.ClosePanel(UIConst.LoadPanel);
-        //MapManager.Instance.ClearMap();
         MapManager.Instance.DrawMap(MapManager.Instance.currentMap,true);
-
     }
     void OnClickLoad()
     {

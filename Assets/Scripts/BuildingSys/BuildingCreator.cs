@@ -26,11 +26,10 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
     Tilemap dmap;
     Tilemap wmap;
     Tilemap fmap;
-    //PlayerInput playerInput;
 
-    TileBase tileBase;//preview
-    BuildingObjectBase selectedObj;//ui
-    Tilemap selectedMap;//ui
+    TileBase tileBase;
+    BuildingObjectBase selectedObj;
+    Tilemap selectedMap;
 
     List<Tilemap> mapList;
     
@@ -39,16 +38,14 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
     Vector2 mousePos;
     Vector3Int gridPos;
     Vector3Int currentGridPosition;
-    //Vector3Int lastGridPosition;
 
     BoundsInt bounds;
     PlaceType placeType;
     NormalType normalType;
 
-    //Map currentMap;
 
     bool holdActive;
-    bool buildable =true;
+    bool buildable = true;
     Vector3Int holdStartPosition;
 
     CreatePanel createPanel;
@@ -57,8 +54,6 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
     protected override void Awake()
     {
         base.Awake();
-        //DontDestroyOnLoad(gameObject);
-        //playerInput = new PlayerInput();
         previewMap = MapManager.Instance.tilemaps["PreviewMap"];
 
         dmap = MapManager.Instance.tilemaps["DefaultMap"];
@@ -68,7 +63,6 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
         { 
             dmap,wmap,fmap,   
         };
-        //currentMap = MapManager.Instance.currentMap;
         _camera = Camera.main;
         
     }
@@ -197,7 +191,6 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
                 buildable = true;
             }
         }
-        //Debug.Log(ctx.interaction + "/" + ctx.phase);
     }
 
     void OnRightClick(InputAction.CallbackContext ctx) 
@@ -359,7 +352,6 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
     void DrawRectangle(Tilemap map)
     {
         previewMap.ClearAllTiles();
-        //defaultMap.ClearAllTiles();
 
         bounds.xMin = holdStartPosition.x < currentGridPosition.x ? holdStartPosition.x : currentGridPosition.x;
         bounds.yMin = holdStartPosition.y < currentGridPosition.y ? holdStartPosition.y : currentGridPosition.y;
@@ -457,7 +449,6 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
     void DeleteRectangle()
     {
         previewMap.ClearAllTiles();
-        //defaultMap.ClearAllTiles();
 
         bounds.xMin = holdStartPosition.x < currentGridPosition.x ? holdStartPosition.x : currentGridPosition.x;
         bounds.yMin = holdStartPosition.y < currentGridPosition.y ? holdStartPosition.y : currentGridPosition.y;

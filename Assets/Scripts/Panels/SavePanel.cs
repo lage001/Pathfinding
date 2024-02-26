@@ -8,7 +8,6 @@ public class SavePanel : BasePanel
     Button saveBtn;
     Button cancelBtn;
     string currentMapName;
-    // Start is called before the first frame update
     private void Awake()
     {
         inputField = transform.Find("Image/InputField").GetComponent<TMP_InputField>();

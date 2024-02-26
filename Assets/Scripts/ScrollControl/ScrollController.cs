@@ -17,7 +17,6 @@ public class ScrollController : MonoBehaviour
             return intPos / (posnum - 1);
         }
     }
-    
     float smoothing = 1;
     bool isShowing = false;
 
@@ -32,7 +31,6 @@ public class ScrollController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        //print(rectTransforms.Length);
         if(Mathf.Abs(scrollrect.horizontalNormalizedPosition - target)>0.001f)
         {
             smoothing += 2;

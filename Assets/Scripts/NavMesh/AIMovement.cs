@@ -17,7 +17,6 @@ public class AIMovement : MonoBehaviour
     {
         moveActive = false;
     }
-    // Update is called once per frame
     void Update()
     {
         if (moveActive)
@@ -30,6 +29,4 @@ public class AIMovement : MonoBehaviour
         this.target = target;
         moveActive = true;
     }
-
-    
 }

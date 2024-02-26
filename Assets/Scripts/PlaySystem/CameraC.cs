@@ -48,7 +48,6 @@ public class CameraC : MonoBehaviour
 
     void OnScrollMove(InputAction.CallbackContext ctx)
     {
-        
         scrollDir = ctx.ReadValue<Vector2>().y/120;
     }
     void UpdateMapScale()

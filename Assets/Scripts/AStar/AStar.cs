@@ -6,7 +6,6 @@ namespace Astar
 {
     public static class AStar
     {
-        //static List<Vector2> check = new List<Vector2>();
         #region Astar Function
         public static List<Vector2> AStarFindWay(Vector2 start, Vector2 target, Func<Vector2, bool> Walkable)
         {
@@ -17,9 +16,10 @@ namespace Astar
             List<Node> toCheck = new List<Node>() { currentNode };
             List<Vector2> Checked = new List<Vector2> {};
             Dictionary<Vector2, Vector2> pathDic = new Dictionary<Vector2, Vector2>() { };
-            
-            while (toCheck.Count > 0)
+            int stepNum = 0;
+            while (toCheck.Count > 0 && stepNum <= 300)
             {
+                
                 List<Node> neighbors = currentNode.GetNeigbors(Checked);
                 toCheck.Remove(currentNode);
                 Checked.Add(currentNode.pos);
@@ -30,9 +30,6 @@ namespace Astar
                     Node node = neighbors[0];
                     foreach (var neighbor in neighbors)
                     {
-                        //neighbor.Cost < node.Cost
-                        //    || neighbor.Cost == node.Cost && neighbor.hCost < node.hCost
-                        //    || neighbor.Cost == node.Cost && neighbor.hCost == node.hCost && GetVCost(neighbor.pos - currentNode.pos, target - currentNode.pos) > GetVCost(node.pos - currentNode.pos, target - currentNode.pos)
                         if (neighbor.Cost < node.Cost
                             || neighbor.Cost == node.Cost && neighbor.hCost < node.hCost
                             || neighbor.Cost == node.Cost && neighbor.hCost == node.hCost && GetVCost(neighbor.pos - currentNode.pos, target - currentNode.pos) > GetVCost(node.pos - currentNode.pos, target - currentNode.pos))
@@ -60,8 +57,8 @@ namespace Astar
                         }
                     }
                 }
+                stepNum += 1;
             }
-            
             return null;
         }
 
@@ -149,7 +146,6 @@ namespace Astar
                     neigbors.Add(node);
                 }
             }
-            Debug.Log("ÁÚ¾ÓµÄ¸öÊý£º" + neigbors.Count);
             return neigbors;
         }
     }

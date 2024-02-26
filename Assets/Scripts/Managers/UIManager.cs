@@ -24,7 +24,7 @@ public class UIManager : SingletonBase<UIManager>
         InitDicts();
     }
 
-    public Transform UIRoot(string panelName)
+    public Transform UIRoot()
     {
         _uiRoot = GameObject.Find("Canvas").transform;
         return _uiRoot;
@@ -43,22 +43,6 @@ public class UIManager : SingletonBase<UIManager>
             {UIConst.PlayPanel,"Game/PlayPanel"},
         };
     }
-    //public T CheckPanel<T>() where T:BasePanel
-    //{
-        
-    //    T panel = FindObjectOfType(typeof(T)) as T;
-    //    string name = typeof(T).ToString();
-    //    if (panel == null)
-    //    {
-    //        print(name);
-    //        return OpenPanel(name) as T;
-    //    }
-    //    else
-    //    {
-    //        panelDict.Add(name,panel);
-    //        return panel;
-    //    }
-    //}
     public BasePanel OpenPanel(string name)
     {
         //检查是否已经打开
@@ -80,7 +64,7 @@ public class UIManager : SingletonBase<UIManager>
             prefabDict.Add(name, panelPrefab);
         }
         //打开界面
-        GameObject panelObject = Instantiate(panelPrefab, UIRoot(name), false);
+        GameObject panelObject = Instantiate(panelPrefab, UIRoot(), false);
         panelObject.SetActive(true);
         panel = panelObject.GetComponent<BasePanel>();
         panelDict.Add(name, panel);

@@ -26,7 +26,6 @@ public class PlayerC : MonoBehaviour
 
     public bool cameraFollow = true;
     public AIMovement agent;
-    // Start is called before the first frame update
     private void Awake()
     {
         rig = GetComponent<Rigidbody2D>();
@@ -50,7 +49,6 @@ public class PlayerC : MonoBehaviour
                 break;
         }
     }
-    // Update is called once per frame
     void FixedUpdate()
     {
         switch (walkMode)
@@ -116,7 +114,6 @@ public class PlayerC : MonoBehaviour
     {
         Velocity.x = Input.GetAxisRaw("Horizontal");
         Velocity.y = Input.GetAxisRaw("Vertical");
-        //transform.Translate(new Vector3(Velocity.x, Velocity.y, 0),Space.World);
         MoveToTarget(transform.position + new Vector3(Velocity.x, Velocity.y, 0));
         
     }
@@ -124,18 +121,14 @@ public class PlayerC : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            //get mouse position
             targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int targetGridPos = map.WorldToCell(targetPos);
             Vector2 finalTarget = new Vector2(targetGridPos.x, targetGridPos.y);
 
-
-            //nowPos = transform.position;
             Vector3Int startGridPos = map.WorldToCell(transform.position);
             Vector2 start = new Vector2(startGridPos.x, startGridPos.y);
 
             pathList = AStar.AStarFindWay(start, finalTarget, MapManager.Instance.currentMap.CheckWalkable);
-            //pathList = AStar_1.AStarFindWay(start, finalTarget, MapManager.Instance.currentMap.CheckWalkable);
 
             MoveActive = true;
             i = 0;
@@ -159,7 +152,6 @@ public class PlayerC : MonoBehaviour
             }
         }
     }
-
     float MoveToTarget(Vector3 target)
     {
         Vector3 direction = target - transform.position;
@@ -167,7 +159,6 @@ public class PlayerC : MonoBehaviour
         rig.velocity = direction * moveSpeed;
         transform.localScale = Mult(new Vector3(Mathf.Sign(-direction.x),1,1) ,( 0.8f * Vector3.one - Mult(direction, direction) * 0.2f));
         
-        //print(transform.localScale);
         return direction.magnitude;
     }
     Vector3 Mult(Vector3 a,Vector3 b)
