@@ -100,9 +100,12 @@ public class TestState : IState
     GameObject agent;
 
     CameraC cameraC;
+    Map map;
     bool firstTimeEnter = true;
 
     NavMeshSurface navMesh;
+
+    
     public void OnEnter()
     {
         if (firstTimeEnter)
@@ -113,8 +116,11 @@ public class TestState : IState
             navMesh = GameObject.Find("Navmesh").GetComponent<NavMeshSurface>();
             firstTimeEnter = false;
         }
+        
+        map = MapManager.Instance.currentMap;
+        
         navMesh.BuildNavMesh();
-        Vector3 startPos = MapManager.Instance.currentMap.start.pos + new Vector3(0.5f, 0.5f, 0);
+        Vector3 startPos = map.start.pos + new Vector3(0.5f, 0.5f, 0);
         cameraC.SetFollow(true);
         GameManager.Instance.playerInput.CameraControl.Disable();
         player = GameObject.Instantiate(PlayerPrefab, startPos, Quaternion.identity);
@@ -136,6 +142,17 @@ public class TestState : IState
     {
         cameraC.CameraFollow(player.transform);
     }
-
-    public void OnUpdate() { }
+    
+    public void OnUpdate() 
+    {
+        if (!map.legal && AchieveTarget())
+        {
+            map.legal = true;
+            Functions.SetWarning("µØÍ¼Í¨¹ý²âÊÔ !!");
+        }
+    }
+    bool AchieveTarget()
+    {
+        return (player.transform.position - new Vector3(map.target.pos.x, map.target.pos.y, 0) - new Vector3(0.5f, 0.5f, 0)).magnitude < 0.8f;
+    }
 }

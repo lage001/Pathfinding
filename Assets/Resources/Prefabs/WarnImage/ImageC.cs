@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ImageC : MonoBehaviour
 {
-    Vector3 target;
     public float dis;
     public float speed;
     RectTransform rect;
@@ -12,11 +11,7 @@ public class ImageC : MonoBehaviour
     private void Start()
     {
         rect = transform.GetComponent<RectTransform>();
-        target = rect.localPosition + Vector3.up * dis;
-    }
-    public void Destroy()
-    {
-        Destroy(gameObject);
+        Destroy(gameObject,2);
     }
     public void FixedUpdate()
     {

@@ -21,7 +21,6 @@ public class MapManager : SingletonBase<MapManager>
     public List<string> mapNameList;
     public Transform VirtualMap;
     public Dictionary<Vector3, GameObject> obstacleDic;
-    GameObject obstaclePrefab;
     protected override void Awake()
     {
         base.Awake();
@@ -78,8 +77,8 @@ public class MapManager : SingletonBase<MapManager>
     {
         if (mapNameList.Contains(mapName) && (mapName != currentMap.name))
         {
-            CreatePanel createPanel = UIManager.Instance.panelDict[UIConst.CreatePanel] as CreatePanel;
-            createPanel.SetWarning("这个名字已经用过了!!");
+            Functions.SetWarning("这个名字已经用过了!!");
+            return;
         }
         else 
         {
@@ -127,7 +126,6 @@ public class MapManager : SingletonBase<MapManager>
     {
         ClearMap(currentMap);
         InitMap();
-        obstacleDic = new Dictionary<Vector3, GameObject>();
     }
 
     public void DrawMap(Map map)
@@ -186,6 +184,8 @@ public class Map
     public string name;
     public SpecialTile start;
     public SpecialTile target;
+
+    public bool legal = false;
 
     public Dictionary<string, TilemapInfo> tilemapDic;
     public Map(Dictionary<string, TilemapInfo> tilemapDic)

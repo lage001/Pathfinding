@@ -40,7 +40,7 @@ public class SavePanel : BasePanel
     private void OnClickSaveBtn()
     {
         
-        if(inputField.text != "")
+        if (inputField.text != "")
         {
             MapManager.Instance.OnSave(inputField.text);
             ClosePanel();

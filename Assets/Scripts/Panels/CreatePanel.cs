@@ -30,7 +30,7 @@ public class CreatePanel : BasePanel
     Transform mask;
     GameObject warnImagePrefab;
 
-    NavMeshSurface navMesh;
+    
     private void Awake()
     {
         InitUI();
@@ -39,10 +39,7 @@ public class CreatePanel : BasePanel
         warnImagePrefab = Resources.Load<GameObject>("Prefabs/WarnImage/Image");
         
     }
-    private void OnEnable()
-    {
-        navMesh = GameObject.Find("Navmesh").GetComponent<NavMeshSurface>();
-    }
+    
     void InitUI()
     {
         canvas = GetComponentInParent<Canvas>();
@@ -122,17 +119,22 @@ public class CreatePanel : BasePanel
     void OnClickSaveBtn()
     {
         if(MapManager.Instance.currentMap.target.isSet && MapManager.Instance.currentMap.start.isSet)
-        {  
+        {
+            if (!MapManager.Instance.currentMap.legal)
+            {
+                Functions.SetWarning("请通过地图测试");
+                return;
+            }
             UIManager.Instance.OpenPanel(UIConst.SavePanel);
         }
         if (!MapManager.Instance.currentMap.target.isSet)
         {
-            SetWarning("请设置终点 !!");
+            Functions.SetWarning("请设置终点 !!");
             Debug.Log("请设置终点");
         }
         if (!MapManager.Instance.currentMap.start.isSet)
         {
-            SetWarning("请设置出发点 !!", -350);
+            Functions.SetWarning("请设置出发点 !!", -350);
             Debug.Log("请设置出发点");
         }
         
@@ -146,13 +148,12 @@ public class CreatePanel : BasePanel
     {
         if (!MapManager.Instance.currentMap.start.isSet)
         {
-            SetWarning("请设置出发点 !!", -350);
+            Functions.SetWarning("请设置出发点 !!", -350);
             Debug.Log("请设置出发点");
         }
         else
         {
             GameManager.Instance.fsm.SwitchState(GameState.Test);
-            navMesh.BuildNavMesh();
         }
     }
     private void OnClickHintBtn()
@@ -197,15 +198,5 @@ public class CreatePanel : BasePanel
         Functions.SetMaskField(screenPos, UItoSelect.rect.width * UItoSelect.localScale.x, UItoSelect.rect.height * UItoSelect.localScale.x, material);
     }
 
-    public void SetWarning(string content,int pos=default)
-    {
-        if (pos == default)
-            pos = -Screen.height / 2 + 80;
-        else
-            pos = -Screen.height / 2 + 540 + pos;
-        GameObject obj = Instantiate(warnImagePrefab, transform);
-        obj.GetComponent<RectTransform>().localPosition = Vector3.up * pos;
-        TMPro.TextMeshProUGUI text = obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-        text.text = content;
-    }
+    
 }

@@ -115,7 +115,6 @@ public class PlaySys
     
     void GameOver()
     {
-        Debug.Log("woqunimade");
         IsOver = true;
         cameraC.SetFollow(false);
         

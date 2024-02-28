@@ -48,9 +48,6 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
     bool buildable = true;
     Vector3Int holdStartPosition;
 
-    CreatePanel createPanel;
-
-    
     protected override void Awake()
     {
         base.Awake();
@@ -65,10 +62,6 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
         };
         _camera = Camera.main;
         
-    }
-    private void Start()
-    {
-        createPanel = UIManager.Instance.panelDict[UIConst.CreatePanel] as CreatePanel;
     }
     private void OnEnable()
     {
@@ -175,7 +168,7 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
                 {
                     if (!buildable)
                     {
-                        createPanel.SetWarning("不能在起点或者终点处放置 !!");
+                        Functions.SetWarning("不能在起点或者终点处放置 !!");
                         print("不能在起点或者终点处放置！！");
                     }
                     else
@@ -189,6 +182,8 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
                 holdActive = false;
 
                 buildable = true;
+                //Map has been modified
+                MapManager.Instance.currentMap.legal = false;
             }
         }
     }
@@ -286,7 +281,7 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
         if (mapList[1].HasTile(currentGridPosition))
         {
             
-            createPanel.SetWarning("起点不能在建筑物上 !!");
+            Functions.SetWarning("起点不能在建筑物上 !!");
             print("起点不能在建筑物上！！");
         }
         else
@@ -308,7 +303,8 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
     {
         if (mapList[1].HasTile(currentGridPosition))
         {
-            createPanel.SetWarning("终点不能在建筑物上 !!");
+            Functions.SetWarning("终点不能在建筑物上 !!");
+            //createPanel.SetWarning("终点不能在建筑物上 !!");
             print("终点不能在建筑物上！！");
         }
         else

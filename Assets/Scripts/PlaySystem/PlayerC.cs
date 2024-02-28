@@ -18,6 +18,7 @@ public class PlayerC : MonoBehaviour
     Vector3 targetPos;
     bool moveActive = false;
     public float moveSpeed;
+    public float defaultSpeed;
     Tilemap map;
 
     List<Vector2> pathList;
@@ -32,6 +33,7 @@ public class PlayerC : MonoBehaviour
         rig = GetComponent<Rigidbody2D>();
         walkMode = WalkMode.AStar;
         map = MapManager.Instance.tilemaps["FloorMap"];
+        defaultSpeed = moveSpeed;
     }
     private void Update()
     {
@@ -113,6 +115,14 @@ public class PlayerC : MonoBehaviour
     {
         Velocity.x = Input.GetAxisRaw("Horizontal");
         Velocity.y = Input.GetAxisRaw("Vertical");
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            moveSpeed = 2 * defaultSpeed;
+        }
+        else
+        {
+            moveSpeed = defaultSpeed;
+        }
         MoveToTarget(transform.position + new Vector3(Velocity.x, Velocity.y, 0));
         
     }
