@@ -63,6 +63,7 @@ public class PlaySys
             GameObject.Destroy(player.gameObject);
         }
         player = playerObj.GetComponent<PlayerC>();
+        
         mask = playerObj.GetComponent<MaskC>();
         cameraC.SetFollow(true);
 

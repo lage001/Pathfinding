@@ -14,11 +14,11 @@ public enum WalkMode
 public class PlayerC : MonoBehaviour
 {
     Vector2 Velocity;
-    Rigidbody2D rig;
+    public Rigidbody2D rig;
     Vector3 targetPos;
     bool moveActive = false;
     public float moveSpeed;
-    public float defaultSpeed;
+    float defaultSpeed;
     Tilemap map;
 
     List<Vector2> pathList;
@@ -27,8 +27,7 @@ public class PlayerC : MonoBehaviour
     public WalkMode walkMode;
 
     public AIMovement Agent;
-    
-    private void Start()
+    private void Awake()
     {
         rig = GetComponent<Rigidbody2D>();
         walkMode = WalkMode.AStar;
@@ -67,7 +66,7 @@ public class PlayerC : MonoBehaviour
             default:
                 break;
         }
-        if (walkMode != WalkMode.NavMesh)
+        if (GameManager.Instance.fsm.currentStateType == GameState.Test && walkMode != WalkMode.NavMesh)
         {
             Agent.SetTarget(transform.position);
         }
@@ -108,7 +107,11 @@ public class PlayerC : MonoBehaviour
         {
             moveActive = value;
             if (!value)
+            {
+                //print(rig == null);
                 rig.velocity = Vector3.zero;
+            }
+                
         }
     }
     void MoveByKeyboard()
