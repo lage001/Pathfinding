@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.AI;
+using NavMeshPlus.Components;
 using UnityEngine.SceneManagement;
 
 
@@ -93,12 +93,16 @@ public class CreateState : IState
 public class TestState : IState
 {
     string panelName = UIConst.TestPanel;
+
     GameObject PlayerPrefab;
     GameObject AgentPrefab;
     GameObject player; 
     GameObject agent;
+
     CameraC cameraC;
     bool firstTimeEnter = true;
+
+    NavMeshSurface navMesh;
     public void OnEnter()
     {
         if (firstTimeEnter)
@@ -106,24 +110,25 @@ public class TestState : IState
             PlayerPrefab = Resources.Load<GameObject>("Prefabs/Player");
             AgentPrefab = Resources.Load<GameObject>("Prefabs/Agent");
             cameraC = Object.FindObjectOfType<CameraC>().GetComponent<CameraC>();
+            navMesh = GameObject.Find("Navmesh").GetComponent<NavMeshSurface>();
             firstTimeEnter = false;
         }
+        navMesh.BuildNavMesh();
         Vector3 startPos = MapManager.Instance.currentMap.start.pos + new Vector3(0.5f, 0.5f, 0);
         cameraC.SetFollow(true);
         GameManager.Instance.playerInput.CameraControl.Disable();
         player = GameObject.Instantiate(PlayerPrefab, startPos, Quaternion.identity);
         agent = GameObject.Instantiate(AgentPrefab, startPos, Quaternion.identity);
+        player.GetComponent<PlayerC>().Agent = agent.GetComponent<AIMovement>();
         UIManager.Instance.OpenPanel(panelName);
 
-        player.GetComponent<PlayerC>().agent = agent.GetComponent<AIMovement>();
-        MapManager.Instance.VirtualMap.GetComponent<NavMeshSurface>().BuildNavMesh();
+        
     }
 
     public void OnExit()
     {
         UIManager.Instance.ClosePanel(UIConst.TestPanel);
         GameObject.Destroy(player);
-        GameObject.Destroy(agent);
         cameraC.SetFollow(false); 
     }
 

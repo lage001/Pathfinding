@@ -72,8 +72,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   walkMode: 0
-  cameraFollow: 1
-  agent: {fileID: 0}
+  Agent: {fileID: 0}
 --- !u!210 &4111866828185508361
 SortingGroup:
   m_ObjectHideFlags: 0

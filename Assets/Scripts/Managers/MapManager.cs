@@ -26,22 +26,11 @@ public class MapManager : SingletonBase<MapManager>
     {
         base.Awake();
         InitMap();
-        InitVirtualMap();
         GetTilemapDic();
         GetTileDic();
         GetMapNameList();
     }
     #region Initialization
-    void InitVirtualMap()
-    {   
-        //创造模式需要虚拟地图
-        if (GameManager.Instance.fsm.currentStateType == GameState.Create)
-        {
-            VirtualMap = GameObject.Find("VirtualMap").transform;
-            obstaclePrefab = Resources.Load<GameObject>("Prefabs/Cube");
-        }
-        obstacleDic = new Dictionary<Vector3, GameObject>();
-    }
     void InitMap()
     {
         TilemapInfo floorMap = new TilemapInfo("floorMap", new Dictionary<string, TileInfo>());
@@ -114,15 +103,15 @@ public class MapManager : SingletonBase<MapManager>
             MyFileHandler.DeleteFile(GetFileName(mapName));
         }
     }
-    public Map OnLoad(string mapName, bool drawVirtualMap)
+    public Map OnLoad(string mapName)
     {
         currentMap = MyFileHandler.ReadFromJSON<Map>(GetFileName(mapName));
-        DrawMap(currentMap, drawVirtualMap);
+        DrawMap(currentMap);
         return currentMap;
     }
     #endregion
     #region View
-    public void ClearMap(Map map, bool drawVirtualMap)
+    public void ClearMap(Map map)
     {
         foreach (var (tilemapName, tilemapInfo) in map.tilemapDic)
         {
@@ -130,20 +119,20 @@ public class MapManager : SingletonBase<MapManager>
             {
                 string[] posList = strPos.Split(",");
                 Vector3Int pos = new Vector3Int(int.Parse(posList[0]), int.Parse(posList[1]), 0);
-                EraseOneTile(pos, tilemapName, drawVirtualMap);
+                EraseOneTile(pos, tilemapName);
             }
         }
     }
-    public void Clear(bool drawVirtualMap)
+    public void Clear()
     {
-        ClearMap(currentMap, drawVirtualMap);
+        ClearMap(currentMap);
         InitMap();
         obstacleDic = new Dictionary<Vector3, GameObject>();
     }
 
-    public void DrawMap(Map map,bool drawVirtualMap)
+    public void DrawMap(Map map)
     {
-        ClearMap(map, drawVirtualMap);
+        ClearMap(map);
         foreach (var (tilemapName,tileMapData) in map.tilemapDic)
         {
             Dictionary<string, TileInfo> tiles = tileMapData.tiles;
@@ -156,43 +145,26 @@ public class MapManager : SingletonBase<MapManager>
                 TileInfo tileInfo = tiles[strPos];
                 string[] posList = strPos.Split(",");
                 Vector3Int pos = new Vector3Int(int.Parse(posList[0]), int.Parse(posList[1]), 0);
-                DrawOneTile(pos, tileDic[tileInfo.name], tilemapName, drawVirtualMap);
+                DrawOneTile(pos, tileDic[tileInfo.name], tilemapName);
             }
         }
     }
-    public Map DrawSelectedMap(string name,bool drawVirtualMap)
+    public Map DrawSelectedMap(string name)
     {
         Map map = MyFileHandler.ReadFromJSON<Map>(GetFileName(name));
-        DrawMap(map, drawVirtualMap);
+        DrawMap(map);
         return map;
     }
-    public void DrawOneTile(Vector3Int pos, BuildingObjectBase objectBase, string tilemapName, bool drawVirtualMap)
+    public void DrawOneTile(Vector3Int pos, BuildingObjectBase objectBase, string tilemapName)
     {
         Tilemap tilemap = tilemaps[tilemapName];
         TileBase tileBase = objectBase == null ? null : objectBase.TileBase;
         tilemap.SetTile(pos, tileBase);
-
-        if (drawVirtualMap && tilemapName != "PreviewMap" && !objectBase.walkable && !obstacleDic.ContainsKey(pos))
-        {
-            Vector3 obstaclePos = pos + new Vector3(0.5f, 0.5f, 0);
-            GameObject obstacle = Instantiate(obstaclePrefab, VirtualMap);
-            obstacle.transform.position = obstaclePos;
-            obstacleDic[pos] = obstacle;
-        }
     }
-    public void EraseOneTile(Vector3Int pos, string tilemapName, bool drawVirtualMap)
+    public void EraseOneTile(Vector3Int pos, string tilemapName)
     {
         Tilemap tilemap = tilemaps[tilemapName];
         tilemap.SetTile(pos, null);
-        if (drawVirtualMap)
-        {
-            GameObject obstacle;
-            if (obstacleDic.TryGetValue(pos, out obstacle))
-            {
-                Destroy(obstacle);
-                obstacleDic.Remove(pos);
-            }
-        }
     }
     #endregion
     string GetFileName(string mapName)

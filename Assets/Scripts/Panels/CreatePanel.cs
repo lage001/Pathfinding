@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
+using NavMeshPlus.Components;
 
 
 public class CreatePanel : BasePanel
@@ -28,12 +29,19 @@ public class CreatePanel : BasePanel
     public Material material;
     Transform mask;
     GameObject warnImagePrefab;
+
+    NavMeshSurface navMesh;
     private void Awake()
     {
         InitUI();
         InitLiseners();
         InitGuideSys();
         warnImagePrefab = Resources.Load<GameObject>("Prefabs/WarnImage/Image");
+        
+    }
+    private void OnEnable()
+    {
+        navMesh = GameObject.Find("Navmesh").GetComponent<NavMeshSurface>();
     }
     void InitUI()
     {
@@ -131,7 +139,7 @@ public class CreatePanel : BasePanel
     }
     void OnClickClearBtn()
     {
-        MapManager.Instance.Clear(true);
+        MapManager.Instance.Clear();
     }
 
     void OnClickTestBtn()
@@ -144,6 +152,7 @@ public class CreatePanel : BasePanel
         else
         {
             GameManager.Instance.fsm.SwitchState(GameState.Test);
+            navMesh.BuildNavMesh();
         }
     }
     private void OnClickHintBtn()

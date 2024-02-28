@@ -326,7 +326,7 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
     }
     void DrawOneTile(Vector3Int pos, Tilemap map)
     {
-        MapManager.Instance.DrawOneTile(pos, selectedObj, map.name,true);
+        MapManager.Instance.DrawOneTile(pos, selectedObj, map.name);
         if(selectedObj != null && selectedObj.Category == Category.Wall && holdActive)
         {
             buildable &= !mapList[0].HasTile(pos);
@@ -425,7 +425,7 @@ public class BuildingCreator : SingletonBase<BuildingCreator>
         {
             if (map.HasTile(pos))
             {
-                MapManager.Instance.EraseOneTile(pos, map.name,true);
+                MapManager.Instance.EraseOneTile(pos, map.name);
                 DeleteTileInfoFromMap(map,pos);
                 return;
             }

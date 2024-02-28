@@ -50,7 +50,7 @@ public class PlaySys
     void GameBegain(int mapIndex)
     {
         //Get map and start position
-        map = MapManager.Instance.OnLoad(mapNameList[mapIndex],false);
+        map = MapManager.Instance.OnLoad(mapNameList[mapIndex]);
 
         playPanel.textTMP.text = "¡¶" + map.name + "¡·";
         Vector3 startPos = map.start.pos + new Vector3(0.5f, 0.5f, 0);

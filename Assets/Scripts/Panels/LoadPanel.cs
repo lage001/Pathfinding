@@ -36,7 +36,7 @@ public class LoadPanel : BasePanel
         if(selectedMapName != null)
         {
             MapManager.Instance.OnDelete(selectedMapName);
-            MapManager.Instance.ClearMap(selectedMap, true);
+            MapManager.Instance.ClearMap(selectedMap);
             Refresh();
         }
     }
@@ -63,7 +63,7 @@ public class LoadPanel : BasePanel
             btn.onClick.AddListener(() => 
             {
                 selectedMapName = name;
-                selectedMap = MapManager.Instance.DrawSelectedMap(name,true);
+                selectedMap = MapManager.Instance.DrawSelectedMap(name);
             });
         }
     }
@@ -78,13 +78,13 @@ public class LoadPanel : BasePanel
     void OnClickCancel()
     {
         UIManager.Instance.ClosePanel(UIConst.LoadPanel);
-        MapManager.Instance.DrawMap(MapManager.Instance.currentMap,true);
+        MapManager.Instance.DrawMap(MapManager.Instance.currentMap);
     }
     void OnClickLoad()
     {
         if (selectedMapName!=null)
         {
-            MapManager.Instance.OnLoad(selectedMapName, true);
+            MapManager.Instance.OnLoad(selectedMapName);
             UIManager.Instance.ClosePanel(UIConst.LoadPanel);
         }
     }

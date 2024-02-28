@@ -1,9 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Tilemaps;
 using Astar;
 using UnityEngine.EventSystems;
+using NavMeshPlus.Components;
 public enum WalkMode
 {
     AStar,
@@ -24,14 +25,13 @@ public class PlayerC : MonoBehaviour
 
     public WalkMode walkMode;
 
-    public bool cameraFollow = true;
-    public AIMovement agent;
-    private void Awake()
+    public AIMovement Agent;
+    
+    private void Start()
     {
         rig = GetComponent<Rigidbody2D>();
         walkMode = WalkMode.AStar;
         map = MapManager.Instance.tilemaps["FloorMap"];
-        
     }
     private void Update()
     {
@@ -65,10 +65,9 @@ public class PlayerC : MonoBehaviour
             default:
                 break;
         }
-
-        if (GameManager.Instance.fsm.currentStateType == GameState.Test && walkMode != WalkMode.NavMesh)
+        if (walkMode != WalkMode.NavMesh)
         {
-            agent.SetTarget(transform.position);
+            Agent.SetTarget(transform.position);
         }
     }
 
@@ -76,9 +75,9 @@ public class PlayerC : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
-            targetPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            targetPos = map.WorldToCell(worldPoint) + new Vector3(0.5f, 0.5f, 0);
             MoveActive = true;
-            agent.SetTarget(targetPos);
         }
     }
 
@@ -86,9 +85,9 @@ public class PlayerC : MonoBehaviour
     {
         if (MoveActive)
         {
-            Vector3 vPos = agent.transform.position;
-            Vector3 newPos = new Vector3(vPos.x, vPos.y, 0);
-            MoveToTarget(newPos);
+            Agent.SetTarget(targetPos);
+
+            MoveToTarget(Agent.transform.position);
         }
     }
 
